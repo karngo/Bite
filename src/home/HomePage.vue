@@ -12,6 +12,13 @@
       name="search"
       placeholder="Search"
     />
+
+    <label for="sort">Sort By:</label>
+    <select name="sort" v-model="selectedSort">
+      <option value="date">Date</option>
+      <option value="name">Name</option>
+    </select>
+
     <table class="table" v-if="usersToDisplay">
       <thead>
         <tr>
@@ -53,6 +60,7 @@ export default {
   data() {
     return {
       searchString: "",
+      selectedSort: "date",
     };
   },
   computed: {
@@ -61,10 +69,23 @@ export default {
       users: (state) => state.users.all,
     }),
     usersToDisplay() {
-      const allUsers = this.users.items || [];
+      const originalUsersList = this.users.items || [];
 
-      if (!Array.isArray(allUsers)) {
+      if (!Array.isArray(originalUsersList)) {
         return [];
+      }
+
+      const allUsers = [...originalUsersList];
+
+      if (this.selectedSort == "name") {
+        allUsers.sort((user1, user2) => {
+          const user1Name = (user1.firstName + user1.lastName).toLowerCase();
+          const user2Name = (user2.firstName + user2.lastName).toLowerCase();
+
+          if (user1Name < user2Name) return -1;
+          if (user1Name > user2Name) return 1;
+          return 0;
+        });
       }
 
       if (!this.searchString) {
