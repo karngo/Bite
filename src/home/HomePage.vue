@@ -19,6 +19,13 @@
       <option value="name">Name</option>
     </select>
 
+    <label for="sort">Role</label>
+    <select name="sort" v-model="selectedRole">
+      <option value="All">All</option>
+      <option value="Auditor">Auditor</option>
+      <option value="User">User</option>
+    </select>
+
     <table class="table" v-if="usersToDisplay">
       <thead>
         <tr>
@@ -61,6 +68,7 @@ export default {
     return {
       searchString: "",
       selectedSort: "date",
+      selectedRole: "All",
     };
   },
   computed: {
@@ -75,7 +83,7 @@ export default {
         return [];
       }
 
-      const allUsers = [...originalUsersList];
+      let allUsers = [...originalUsersList];
 
       if (this.selectedSort == "name") {
         allUsers.sort((user1, user2) => {
@@ -86,6 +94,10 @@ export default {
           if (user1Name > user2Name) return 1;
           return 0;
         });
+      }
+
+      if (this.selectedRole != "All") {
+        allUsers = allUsers.filter(({ role }) => role == this.selectedRole);
       }
 
       if (!this.searchString) {
