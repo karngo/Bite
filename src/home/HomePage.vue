@@ -66,6 +66,7 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
+            <th scope="col">Created On</th>
             <th scope="col">Role</th>
             <th scope="col">Actions</th>
           </tr>
@@ -75,6 +76,9 @@
             <th scope="row">{{ currentPage * 10 + index + 1 }}</th>
             <td>
               {{ user.firstName + " " + user.lastName }}
+            </td>
+            <td>
+              {{ user.createdDate | formatDate }}
             </td>
             <td>
               <span class="badge badge-secondary">{{ user.role }}</span>
@@ -120,6 +124,8 @@
 <script>
 import { mapState, mapActions } from "vuex";
 
+const getTwoDigit = (num) => ("0" + num).slice(-2);
+
 export default {
   data() {
     return {
@@ -129,6 +135,19 @@ export default {
       currentPage: 0,
       activeTab: "dashboard",
     };
+  },
+  filters: {
+    formatDate(dateString) {
+      const dateObj = new Date(dateString);
+      const DD = getTwoDigit(dateObj.getDate());
+      const MM = getTwoDigit(dateObj.getMonth() + 1);
+      const YYYY = dateObj.getFullYear();
+      const hh = getTwoDigit(dateObj.getHours() + 1);
+      const mm = getTwoDigit(dateObj.getMinutes() + 1);
+      const ss = getTwoDigit(dateObj.getSeconds() + 1);
+
+      return `${DD}/${MM}/${YYYY} ${hh};${mm}:${ss}`;
+    },
   },
   watch: {
     totalPages(oldVal, newVal) {
