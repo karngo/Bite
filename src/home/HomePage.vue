@@ -54,6 +54,31 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="btn-toolbar" role="toolbar">
+      <div class="btn-group me-2" role="group">
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          @click="currentPage--"
+          :disabled="currentPage == 0"
+        >
+          Prev
+        </button>
+        <button type="button" class="btn btn-outline-primary" disabled>
+          {{ currentPage + 1 + " of " + totalPages }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          @click="currentPage++"
+          :disabled="currentPage == totalPages - 1"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+
     <p>
       <router-link to="/login">Logout</router-link>
     </p>
@@ -69,6 +94,7 @@ export default {
       searchString: "",
       selectedSort: "date",
       selectedRole: "All",
+      currentPage: 0,
     };
   },
   computed: {
@@ -110,6 +136,9 @@ export default {
       });
 
       return searchedUsers;
+    },
+    totalPages() {
+      return Math.ceil(this.usersToDisplay.length / 10);
     },
   },
   created() {
