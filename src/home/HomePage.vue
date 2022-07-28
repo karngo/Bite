@@ -188,11 +188,20 @@ export default {
   created() {
     this.getAllUsers();
   },
+  mounted() {
+    this.setActiveTab();
+  },
   methods: {
     ...mapActions("users", {
       getAllUsers: "getAll",
       deleteUser: "delete",
     }),
+    setActiveTab() {
+      const loggedInUser = this.account.user;
+      if (loggedInUser.role == "Auditor") {
+        this.activeTab = "audit";
+      }
+    },
   },
 };
 </script>
