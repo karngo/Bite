@@ -54,6 +54,12 @@
         <option value="name">Name</option>
       </select>
 
+      <label for="sort">Time</label>
+      <select name="sort" v-model="timeFormat">
+        <option value="24hr">24hr</option>
+        <option value="12hr">12hr</option>
+      </select>
+
       <label for="sort">Role</label>
       <select name="sort" v-model="selectedRole">
         <option value="All">All</option>
@@ -78,7 +84,7 @@
               {{ user.firstName + " " + user.lastName }}
             </td>
             <td>
-              {{ user.createdDate | formatDate }}
+              {{ user.createdDate | formatDate(timeFormat) }}
             </td>
             <td>
               <span class="badge badge-secondary">{{ user.role }}</span>
@@ -134,10 +140,11 @@ export default {
       selectedRole: "All",
       currentPage: 0,
       activeTab: "dashboard",
+      timeFormat: "24hr",
     };
   },
   filters: {
-    formatDate(dateString) {
+    formatDate(dateString, format) {
       const dateObj = new Date(dateString);
       const DD = getTwoDigit(dateObj.getDate());
       const MM = getTwoDigit(dateObj.getMonth() + 1);
@@ -145,6 +152,12 @@ export default {
       const hh = getTwoDigit(dateObj.getHours() + 1);
       const mm = getTwoDigit(dateObj.getMinutes() + 1);
       const ss = getTwoDigit(dateObj.getSeconds() + 1);
+
+      if (format == "12hr") {
+        const hh12 = getTwoDigit(hh > 12 ? hh - 12 : hh);
+        const ampm = hh > 11 ? "pm" : "am";
+        return `${DD}/${MM}/${YYYY} ${hh12};${mm}:${ss}${ampm}`;
+      }
 
       return `${DD}/${MM}/${YYYY} ${hh};${mm}:${ss}`;
     },
