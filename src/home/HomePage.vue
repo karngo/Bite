@@ -41,31 +41,43 @@
     </div>
 
     <div v-show="activeTab == 'audit'">
-      <input
-        type="text"
-        v-model="searchString"
-        name="search"
-        placeholder="Search"
-      />
-
-      <label for="sort">Sort By:</label>
-      <select name="sort" v-model="selectedSort">
-        <option value="date">Date</option>
-        <option value="name">Name</option>
-      </select>
-
-      <label for="sort">Time</label>
-      <select name="sort" v-model="timeFormat">
-        <option value="24hr">24hr</option>
-        <option value="12hr">12hr</option>
-      </select>
-
-      <label for="sort">Role</label>
-      <select name="sort" v-model="selectedRole">
-        <option value="All">All</option>
-        <option value="Auditor">Auditor</option>
-        <option value="User">User</option>
-      </select>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <input
+              class="form-control"
+              type="text"
+              v-model="searchString"
+              name="search"
+              placeholder="Search"
+            />
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <label for="sort" class="form-label">Sort By</label>
+            <select name="sort" v-model="selectedSort" class="form-control">
+              <option value="date">Date</option>
+              <option value="name">Name</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="sort" class="form-label">Time</label>
+            <select name="sort" v-model="timeFormat" class="form-control">
+              <option value="24hr">24hr</option>
+              <option value="12hr">12hr</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="sort" class="form-label">Role</label>
+            <select name="sort" v-model="selectedRole" class="form-control">
+              <option value="All">All</option>
+              <option value="Auditor">Auditor</option>
+              <option value="User">User</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
       <table class="table" v-if="usersInPage">
         <thead>
@@ -237,3 +249,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.form-label {
+  margin-bottom: 2px;
+  margin-top: 4px;
+}
+</style>
