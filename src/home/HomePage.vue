@@ -26,7 +26,7 @@
       <option value="User">User</option>
     </select>
 
-    <table class="table" v-if="usersToDisplay">
+    <table class="table" v-if="usersInPage">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -36,8 +36,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user, index) in usersToDisplay" :key="user.id">
-          <th scope="row">{{ index + 1 }}</th>
+        <tr v-for="(user, index) in usersInPage" :key="user.id">
+          <th scope="row">{{ currentPage * 10 + index + 1 }}</th>
           <td>
             {{ user.firstName + " " + user.lastName }}
           </td>
@@ -97,6 +97,13 @@ export default {
       currentPage: 0,
     };
   },
+  watch: {
+    totalPages(oldVal, newVal) {
+      if (oldVal != newVal) {
+        this.currentPage = 0;
+      }
+    },
+  },
   computed: {
     ...mapState({
       account: (state) => state.account,
@@ -139,6 +146,10 @@ export default {
     },
     totalPages() {
       return Math.ceil(this.usersToDisplay.length / 10);
+    },
+    usersInPage() {
+      const currentIndex = this.currentPage * 10;
+      return this.usersToDisplay.slice(currentIndex, currentIndex + 10);
     },
   },
   created() {
